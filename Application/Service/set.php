@@ -1,6 +1,6 @@
 <?php
 // Load composer
-require __DIR__ . '/../vendor/autoload.php';
+require __DIR__ . '/../../vendor/autoload.php';
 
 $APPLICATION_CONFIG = include_once __DIR__ . '/../Core/config.php';
 
