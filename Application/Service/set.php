@@ -2,7 +2,7 @@
 // Load composer
 require __DIR__ . '/../vendor/autoload.php';
 
-$APPLICATION_CONFIG = include_once __DIR__ . '/../Application/Core/config.php';
+$APPLICATION_CONFIG = include_once __DIR__ . '/../Core/config.php';
 
 $bot_api_key  = $APPLICATION_CONFIG['bot_api_key'];
 $bot_username  = $APPLICATION_CONFIG['bot_username'];
