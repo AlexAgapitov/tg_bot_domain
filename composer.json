@@ -1,0 +1,6 @@
+{
+    "require": {
+        "php-telegram-bot/telegram-bot-manager": "^1.7",
+        "longman/telegram-bot": "^0.73.1"
+    }
+}
