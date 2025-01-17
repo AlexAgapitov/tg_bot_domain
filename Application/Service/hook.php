@@ -29,6 +29,8 @@ try {
 
     $telegram->addCommandsPaths($APPLICATION_CONFIG['commands']['paths']);
 
+    $telegram->enableMySql($APPLICATION_CONFIG['mysql']);
+
     // Handle telegram webhook request
     $telegram->handle();
 } catch (Longman\TelegramBot\Exception\TelegramException $e) {

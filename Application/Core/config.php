@@ -8,4 +8,12 @@ return [
              __DIR__ . '/../Commands',
         ]
     ],
+
+     'mysql' => [
+         'host'     => 'mysql',
+         'port'     => 3306, // optional
+         'user'     => 'root',
+         'password' => 'Sup3RS3curePassw0rd69',
+         'database' => 'telegram_bot',
+     ],
 ];
