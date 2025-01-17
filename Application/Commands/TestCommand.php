@@ -193,8 +193,5 @@ class TestCommand extends UserCommand
         }
 
         return $result;
-
-
-        return Request::sendMessage($data);        // Send message!
     }
 }
