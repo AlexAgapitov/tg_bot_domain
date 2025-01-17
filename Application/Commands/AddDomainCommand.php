@@ -8,7 +8,7 @@ use Longman\TelegramBot\Entities\Keyboard;
 use Longman\TelegramBot\Entities\KeyboardButton;
 use Longman\TelegramBot\Request;
 
-class TestCommand extends UserCommand
+class AddDomainCommand extends UserCommand
 {
     protected $name = 'add_domain';
     protected $description = 'A command for add domain';
@@ -81,6 +81,7 @@ class TestCommand extends UserCommand
                 }
 
                 $notes['time'] = $text;
+                $text         = '';
             case 2:
                 $keyboard = ['1 день', '3 дня', '7 дней'];
                 if ($text === '' || !in_array($text, $keyboard, true)) {
@@ -102,6 +103,7 @@ class TestCommand extends UserCommand
                 }
 
                 $notes['time'] = $text;
+                $text         = '';
             case 3:
                 $this->conversation->update();
                 $out_text = '/Survey result:' . PHP_EOL;
