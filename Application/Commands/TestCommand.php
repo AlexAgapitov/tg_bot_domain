@@ -24,16 +24,16 @@ class TestCommand extends UserCommand
             'chat_id' => $chat_id,                 // Set Chat ID to send the message to
             'text'    => 'This is just a Test...', // Set message to send
         ];
-
-        // Digits with operations
-        $keyboards[] = new Keyboard(
-            ['7', '8', '9', '+'],
-            ['4', '5', '6', '-'],
-            ['1', '2', '3', '*'],
-            [' ', '0', ' ', '/']
-        );
-
-        $data['reply_markup'] = $keyboards;
+//
+//        // Digits with operations
+//        $keyboards[] = new Keyboard(
+//            ['7', '8', '9', '+'],
+//            ['4', '5', '6', '-'],
+//            ['1', '2', '3', '*'],
+//            [' ', '0', ' ', '/']
+//        );
+//
+//        $data['reply_markup'] = $keyboards;
 
         return Request::sendMessage($data);        // Send message!
     }
