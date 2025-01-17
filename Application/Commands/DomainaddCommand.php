@@ -8,11 +8,11 @@ use Longman\TelegramBot\Entities\Keyboard;
 use Longman\TelegramBot\Entities\KeyboardButton;
 use Longman\TelegramBot\Request;
 
-class AddDomainCommand extends UserCommand
+class DomainaddCommand extends UserCommand
 {
-    protected $name = 'add_domain';
+    protected $name = 'domainadd';
     protected $description = 'A command for add domain';
-    protected $usage = '/add_domain';
+    protected $usage = '/domainadd';
     protected $version = '1.0.0';
     protected $need_mysql = false;
 
