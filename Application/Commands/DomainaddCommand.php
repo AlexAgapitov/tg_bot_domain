@@ -102,7 +102,7 @@ class DomainaddCommand extends UserCommand
                     break;
                 }
 
-                $notes['time'] = $text;
+                $notes['days'] = $text;
                 $text         = '';
             case 3:
                 $this->conversation->update();
