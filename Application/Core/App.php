@@ -14,7 +14,7 @@ class App
 
     public function run(): void
     {
-        if (!empty($_GET['_t_test']) && $_GET['t'] == 't') {
+        if (!empty($_GET['_t_test']) && $_GET['_t_test'] == 't') {
             $Api = new Api();
             var_dump($Api->getTimes());
             var_dump($Api->getDays());
