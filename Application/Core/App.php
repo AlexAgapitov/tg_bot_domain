@@ -13,18 +13,6 @@ class App
 
     public function run(): void
     {
-        if (!empty($_GET['_t_test']) && $_GET['_t_test'] == 't') {
-            $Api = new Api();
-            $params['user_id'] = 111;
-            $params['time'] = 1;
-            $params['days'] = 2;
-            $params['name'] = 'aga-tg-bots.ru';
-
-            var_dump($Api->addDomain($params));
-            var_dump($Api->getRequest());
-            var_dump($Api->getMessage());
-            exit;
-        }
         if (isset($_SERVER['REQUEST_METHOD'])) {
             $app = new \Silex\Application();
 
