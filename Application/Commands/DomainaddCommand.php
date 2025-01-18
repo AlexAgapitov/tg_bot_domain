@@ -115,7 +115,7 @@ class DomainaddCommand extends UserCommand
 
                 $this->conversation->stop();
 
-                $result = Request::sendMediaGroup($data);
+                $result = Request::sendMessage($data);
                 break;
         }
 
