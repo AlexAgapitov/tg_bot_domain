@@ -116,8 +116,8 @@ class DomainaddCommand extends UserCommand
                 }
 
                 $params['user_id'] = $chat_id;
-//                $params['time'] = 1;
-//                $params['days'] = 2;
+                $params['time'] = 1;
+                $params['days'] = 2;
                 $res = $this->addDomain($params);
 
                 $data['text'] = ($res ? $out_text : 'Ошибка! Попробуйте позже.').json_encode($params);
