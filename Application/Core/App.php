@@ -43,9 +43,11 @@ class App
                 return self::buildAnswer(
                     false !== ($id = Router::addDomain())
                     ? self::buildSuccess(['id' => $id])
-                    : self::buildError([])
+                    : self::buildError(['message' => Router::getErrorMessage()])
                 );
             });
+
+            $app['debug'] = true;
 
             $app->run();
 
