@@ -16,8 +16,9 @@ class App
     {
         if (!empty($_GET['_t_test']) && $_GET['_t_test'] == 't') {
             $Api = new Api();
-            var_dump($Api->getTimes());
+            var_dump(array_column($Api->getTimes(), 'name'));
             var_dump($Api->getDays());
+            var_dump($Api->getRequest());
             exit;
         }
         if (isset($_SERVER['REQUEST_METHOD'])) {

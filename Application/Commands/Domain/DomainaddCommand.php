@@ -70,9 +70,9 @@ class DomainaddCommand extends UserCommand
                         ->setOneTimeKeyboard(true)
                         ->setSelective(true);
 
-                    $data['text'] = 'Выберите время по Москве, когда Вам удобно получать уведомления';
+                    $data['text'] = 'Выберите время по Москве, когда Вам удобно получать уведомления'.json_encode($res);
                     if ($text !== '') {
-                        $data['text'] = 'Выберите время по Москве, когда Вам удобно получать уведомления';
+                        $data['text'] = 'Выберите время по Москве, когда Вам удобно получать уведомления'.json_encode($res);
                     }
 
                     $result = Request::sendMessage($data);
