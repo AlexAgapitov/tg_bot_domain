@@ -48,7 +48,7 @@ class Api
             if (null === ($res = $this->parse($res))) {
                 throw new \Exception('error', 1);
             }
-            return $res['days'] ?? [];
+            return $res ?? [];
         } catch (\Exception $e) {
             return null;
         }
