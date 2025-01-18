@@ -60,7 +60,7 @@ class DomainaddCommand extends UserCommand
 
                 }
                 $keyboard = array_column($res, 'name');
-//                $keyboard = ['11:00 - 12:00', '12:00 - 13:00'];
+                $keyboard = ['11:00 - 12:00' => 1, '12:00 - 13:00' => 2];
                 if ($text === '' || !in_array($text, $keyboard, true)) {
                     $notes['state'] = 1;
                     $this->conversation->update();
@@ -70,9 +70,11 @@ class DomainaddCommand extends UserCommand
                         ->setOneTimeKeyboard(true)
                         ->setSelective(true);
 
-                    $data['text'] = 'Выберите время по Москве, когда Вам удобно получать уведомления'.json_encode($res);
+                    $message_text = 'Выберите время по Москве, когда Вам удобно получать уведомления';
+
+                    $data['text'] = $message_text;
                     if ($text !== '') {
-                        $data['text'] = 'Выберите время по Москве, когда Вам удобно получать уведомления'.json_encode($res);
+                        $data['text'] = $message_text;
                     }
 
                     $result = Request::sendMessage($data);
@@ -98,9 +100,11 @@ class DomainaddCommand extends UserCommand
                         ->setOneTimeKeyboard(true)
                         ->setSelective(true);
 
-                    $data['text'] = 'Выберите за сколько дней до дня оплаты отправить Вам уведомление';
+                    $message_text = 'Выберите за сколько дней до дня оплаты отправить Вам уведомление';
+
+                    $data['text'] = $message_text;
                     if ($text !== '') {
-                        $data['text'] = 'Выберите за сколько дней до дня оплаты отправить Вам уведомление';
+                        $data['text'] = $message_text;
                     }
 
                     $result = Request::sendMessage($data);

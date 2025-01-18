@@ -8,7 +8,6 @@ use Symfony\Component\HttpFoundation\Request;
 
 class App
 {
-    public static array $params = [];
 
     public static array $middleware = [];
 
@@ -29,7 +28,7 @@ class App
                     $data = json_decode($request->getContent(), true);
                     $request->request->replace(is_array($data) ? $data : array());
                 }
-                self::$params = $request->request->all();
+                Router::$params = $request->request->all();
             });
 
             $app->get('/api/v1/dictionary/get/times', function () use ($app) {

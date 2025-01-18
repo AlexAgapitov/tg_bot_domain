@@ -4,6 +4,7 @@ namespace Core;
 
 class Router
 {
+    public static array $params = [];
 
     public static function addDomain()
     {

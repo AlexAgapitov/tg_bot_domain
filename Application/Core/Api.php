@@ -38,6 +38,22 @@ class Api
         }
     }
 
+    public function addDomain(int $user_id, string $name, int $time, int $day)
+    {
+        try {
+            if (false === ($res = $this->query('api/v1/dictionary/get/days'))) {
+                throw new \Exception('error', 1);
+            }
+
+            if (null === ($res = $this->parse($res))) {
+                throw new \Exception('error', 1);
+            }
+            return $res['days'] ?? [];
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
 
     private function query(string $path, array $params = [], string $method = 'GET')
     {
