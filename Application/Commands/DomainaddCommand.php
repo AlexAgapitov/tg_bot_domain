@@ -111,13 +111,11 @@ class DomainaddCommand extends UserCommand
                 foreach ($notes as $k => $v) {
                     $out_text .= PHP_EOL . ucfirst($k) . ': ' . $v;
                 }
-
-                $data['photo']   = $notes['photo_id'];
-                $data['caption'] = $out_text;
+                $data['text'] = $out_text;
 
                 $this->conversation->stop();
 
-                $result = Request::sendPhoto($data);
+                $result = Request::sendMediaGroup($data);
                 break;
         }
 
