@@ -120,7 +120,7 @@ class DomainaddCommand extends UserCommand
                 $params['days'] = 2;
                 $res = $this->addDomain($params);
 
-                $data['text'] = $res ? $out_text : 'Ошибка! Попробуйте позже.';
+                $data['text'] = ($res ? $out_text : 'Ошибка! Попробуйте позже.').$chat_id;
 
                 $this->conversation->stop();
 
