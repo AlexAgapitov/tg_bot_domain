@@ -87,6 +87,8 @@ class Api
         $info = curl_getinfo($ch);
         curl_close($ch);
 
+        var_dump($res);exit;
+
         $this->request['status'] = $info['http_code'];
 
         return $res;

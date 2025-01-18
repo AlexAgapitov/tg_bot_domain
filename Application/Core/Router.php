@@ -12,11 +12,12 @@ class Router
     public static function addDomain()
     {
         try {
+            $params = self::$params['POST'];
             $Repository = new \Src\Infrastructure\Repository\DomainRepository();
             $Factory = new \Src\Infrastructure\Factory\CommonDomainFactory();
             $UseCase = new \Src\Application\UseCase\SubmitDomain\SubmitDomainUseCase($Factory, $Repository);
             $Command = new \Src\Infrastructure\Command\SubmitDomainCommand($UseCase);
-            $Request = new \Src\Application\UseCase\SubmitDomain\SubmitDomainRequest(self::$params['user_id'], self::$params['name'], self::$params['time'], self::$params['days']);
+            $Request = new \Src\Application\UseCase\SubmitDomain\SubmitDomainRequest($params['user_id'], $params['name'], $params['time'], $params['days']);
             $result = $Command($Request);
 
             return $result->id;
@@ -52,6 +53,14 @@ class Router
 
     public static function getErrorMessage(): ?string
     {
-        return self::$error_message;
+        return self::$error_message ?? '';
+    }
+
+    public static function setParams()
+    {
+        self::$params = [
+            'GET' => $_GET,
+            'POST' => json_decode(file_get_contents('php://input'), true) ?? [],
+        ];
     }
 }
