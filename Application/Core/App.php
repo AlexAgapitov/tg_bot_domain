@@ -14,6 +14,12 @@ class App
 
     public function run(): void
     {
+        if (!empty($_GET['_t_test']) && $_GET['t'] == 't') {
+            $Api = new Api();
+            var_dump($Api->getTimes());
+            var_dump($Api->getDays());
+            exit;
+        }
         if (isset($_SERVER['REQUEST_METHOD'])) {
             $app = new \Silex\Application();
 
@@ -33,7 +39,7 @@ class App
                 return self::buildAnswer(self::buildSuccess(['days' => Router::getDays()]));
             });
 
-            $app->post('/api/v1/domain/post/add', function () use ($app) {
+            $app->post('/api/v1/domain/post/set', function () use ($app) {
                 return self::buildAnswer(
                     false !== ($id = Router::addDomain())
                     ? self::buildSuccess(['id' => $id])
