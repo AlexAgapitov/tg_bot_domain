@@ -17,7 +17,7 @@ class Api
             if (null === ($res = $this->parse($res))) {
                 throw new \Exception('error', 1);
             }
-            return $res;
+            return $res['times'] ?? [];
         } catch (\Exception $e) {
             return null;
         }
@@ -32,7 +32,7 @@ class Api
             if (null === ($res = $this->parse($res))) {
                 throw new \Exception('error', 1);
             }
-            return $res;
+            return $res['days'] ?? [];
         } catch (\Exception $e) {
             return null;
         }
