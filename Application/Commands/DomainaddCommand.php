@@ -63,7 +63,7 @@ class DomainaddCommand extends UserCommand
             case 1:
                 $keyboard = ['11:00 - 12:00', '12:00 - 13:00'];
                 if ($text === '' || !in_array($text, $keyboard, true)) {
-                    $notes['state'] = 3;
+                    $notes['state'] = 1;
                     $this->conversation->update();
 
                     $data['reply_markup'] = (new Keyboard($keyboard))
@@ -85,7 +85,7 @@ class DomainaddCommand extends UserCommand
             case 2:
                 $keyboard = ['1 день', '3 дня', '7 дней'];
                 if ($text === '' || !in_array($text, $keyboard, true)) {
-                    $notes['state'] = 3;
+                    $notes['state'] = 2;
                     $this->conversation->update();
 
                     $data['reply_markup'] = (new Keyboard($keyboard))
