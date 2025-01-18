@@ -1,11 +1,10 @@
 <?php
 
-namespace Commands;
+namespace Domain\Commands;
 
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Conversation;
 use Longman\TelegramBot\Entities\Keyboard;
-use Longman\TelegramBot\Entities\KeyboardButton;
 use Longman\TelegramBot\Request;
 
 class DomainaddCommand extends UserCommand
@@ -19,33 +18,26 @@ class DomainaddCommand extends UserCommand
     public function execute(): \Longman\TelegramBot\Entities\ServerResponse
     {
         $message = $this->getMessage();
-        $chat    = $message->getChat();
-        $user    = $message->getFrom();
-        $text    = trim($message->getText(true));
+        $chat = $message->getChat();
+        $user = $message->getFrom();
+        $text = trim($message->getText(true));
         $chat_id = $chat->getId();
         $user_id = $user->getId();
 
-        // Preparing response
         $data = [
-            'chat_id'      => $chat_id,
-            // Remove any keyboard by default
+            'chat_id' => $chat_id,
             'reply_markup' => Keyboard::remove(['selective' => true]),
         ];
 
-        // Conversation start
         $this->conversation = new Conversation($user_id, $chat_id, $this->getName());
 
-        // Load any existing notes from this conversation
         $notes = &$this->conversation->notes;
         !is_array($notes) && $notes = [];
 
-        // Load the current state of the conversation
         $state = $notes['state'] ?? 0;
 
         $result = Request::emptyResponse();
 
-        // State machine
-        // Every time a step is achieved the state is updated
         switch ($state) {
             case 0:
                 if ($text === '') {
@@ -59,7 +51,7 @@ class DomainaddCommand extends UserCommand
                 }
 
                 $notes['name'] = $text;
-                $text          = '';
+                $text = '';
             case 1:
                 $keyboard = ['11:00 - 12:00', '12:00 - 13:00'];
                 if ($text === '' || !in_array($text, $keyboard, true)) {
@@ -81,7 +73,7 @@ class DomainaddCommand extends UserCommand
                 }
 
                 $notes['time'] = $text;
-                $text         = '';
+                $text = '';
             case 2:
                 $keyboard = ['1 день', '3 дня', '7 дней'];
                 if ($text === '' || !in_array($text, $keyboard, true)) {
@@ -103,7 +95,7 @@ class DomainaddCommand extends UserCommand
                 }
 
                 $notes['days'] = $text;
-                $text         = '';
+                $text = '';
             case 3:
                 $this->conversation->update();
                 $out_text = '/Survey result:' . PHP_EOL;

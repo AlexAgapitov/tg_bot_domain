@@ -3,67 +3,90 @@
 namespace Core;
 
 use Exception;
+use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Component\HttpFoundation\Request;
 
 class App
 {
-    public function run()
-    {
-        $args = $_SERVER['argv'];
+    public static array $params = [];
 
-        switch ($args[1]) {
-            case 'add':
-                $this->add($args[2]);
-                break;
-            case 'getTimes':
-                $this->getTimes();
-                break;
-            case 'getDays':
-                $this->getDays();
-                break;
-            default:
-                throw new Exception('Command not found');
+    public static array $middleware = [];
+
+    public function run(): void
+    {
+        if (isset($_SERVER['REQUEST_METHOD'])) {
+            $app = new \Silex\Application();
+
+            $app->before(function (Request $request) {
+                if (str_starts_with($request->headers->get('Content-Type'), 'application/json')) {
+                    $data = json_decode($request->getContent(), true);
+                    $request->request->replace(is_array($data) ? $data : array());
+                }
+                self::$params = $request->request->all();
+            });
+
+            $app->get('/api/v1/dictionary/get/times', function () use ($app) {
+                return self::buildAnswer(self::buildSuccess(['times' => Router::getTimes()]));
+            });
+
+            $app->get('/api/v1/dictionary/get/days', function () use ($app) {
+                return self::buildAnswer(self::buildSuccess(['days' => Router::getDays()]));
+            });
+
+            $app->post('/api/v1/domain/post/add', function () use ($app) {
+                return self::buildAnswer(
+                    false !== ($id = Router::addDomain())
+                    ? self::buildSuccess(['id' => $id])
+                    : self::buildError([])
+                );
+            });
+
+            $app->run();
+
+        } else {
+            $args = $_SERVER['argv'];
+
+            switch ($args[1]) {
+                case 'add':
+                    $array = !empty($args[2]) ? json_decode($args[2], true) : null;
+                    if (empty($array)) {
+                        throw new Exception('Error in string');
+                    }
+                    Router::addDomain();
+                    break;
+                case 'getTimes':
+                    Router::getTimes();
+                    break;
+                case 'getDays':
+                    Router::getDays();
+                    break;
+                default:
+                    throw new Exception('Command not found');
+            }
         }
     }
 
-    private function add(string $json = null)
+    private static function buildAnswer(array $content): JsonResponse
     {
-        $array = !empty($json) ? json_decode($json, true) : null;
-        if (empty($array)) {
-            throw new Exception('Error in string');
-        }
-
-        $Repository = new \Src\Infrastructure\Repository\DomainRepository();
-        $Factory = new \Src\Infrastructure\Factory\CommonDomainFactory();
-        $UseCase = new \Src\Application\UseCase\SubmitDomain\SubmitDomainUseCase($Factory, $Repository);
-        $Command = new \Src\Infrastructure\Command\SubmitDomainCommand($UseCase);
-        $Request = new \Src\Application\UseCase\SubmitDomain\SubmitDomainRequest($array['user_id'], $array['name'], $array['time'], $array['days']);
-        $result = $Command($Request);
-
-        var_dump("id in storage: ".$result->id);
+        $response = new JsonResponse();
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        $response->setData($content);
+        return $response;
     }
 
-    private function getTimes()
+    private function buildSuccess(array $content): array
     {
-        $Repository = new \Src\Infrastructure\Repository\TimesRepository();
-        $Redis = new \Src\Infrastructure\Gateway\RedisGateway();
-        $UseCase = new \Src\Application\UseCase\GetTimes\GetTimesUseCase($Repository, $Redis);
-        $Command = new \Src\Infrastructure\Command\GetTimesCommand($UseCase);
-        $Request = new \Src\Application\UseCase\GetTimes\GetTimesRequest();
-        $result = $Command($Request);
-
-        var_dump($result);
+        return [
+            'ok' => 1,
+            'content' => $content,
+        ];
     }
 
-    private function getDays()
+    private function buildError(array $content): array
     {
-        $Repository = new \Src\Infrastructure\Repository\DaysRepository();
-        $Redis = new \Src\Infrastructure\Gateway\RedisGateway();
-        $UseCase = new \Src\Application\UseCase\GetDays\GetDaysUseCase($Repository, $Redis);
-        $Command = new \Src\Infrastructure\Command\GetDaysCommand($UseCase);
-        $Request = new \Src\Application\UseCase\GetDays\GetDaysRequest();
-        $result = $Command($Request);
-
-        var_dump($result);
+        return [
+            'ok' => 0,
+            'content' => $content,
+        ];
     }
-
 }

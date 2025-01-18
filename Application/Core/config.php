@@ -2,7 +2,7 @@
 return [
     'bot_api_key' => '8083746843:AAE10syeqtx0H45K9dlsgClHiktolAZmoTo',
     'bot_username' => 'dont_forget_pay_domen_bot',
-    'bot_hook_url' => 'https://aga-tg-bots.ru/Service/hook.php',
+    'bot_hook_url' => $_ENV['domain'].'Service/hook.php',
 
     'commands' => [
         'paths' => [
