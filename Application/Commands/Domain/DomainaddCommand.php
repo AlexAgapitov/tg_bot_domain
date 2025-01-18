@@ -2,6 +2,7 @@
 
 namespace Domain\Commands;
 
+use Core\Api;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Conversation;
 use Longman\TelegramBot\Entities\Keyboard;
@@ -53,7 +54,13 @@ class DomainaddCommand extends UserCommand
                 $notes['name'] = $text;
                 $text = '';
             case 1:
-                $keyboard = ['11:00 - 12:00', '12:00 - 13:00'];
+                $Api = new Api();
+                $res = $Api->getTimes();
+                if ($Api->getRequest()['status'] !== 200 || empty($res)) {
+
+                }
+                $keyboard = array_column($res, 'name');
+//                $keyboard = ['11:00 - 12:00', '12:00 - 13:00'];
                 if ($text === '' || !in_array($text, $keyboard, true)) {
                     $notes['state'] = 1;
                     $this->conversation->update();
@@ -75,7 +82,13 @@ class DomainaddCommand extends UserCommand
                 $notes['time'] = $text;
                 $text = '';
             case 2:
-                $keyboard = ['1 день', '3 дня', '7 дней'];
+                $Api = new Api();
+                $res = $Api->getDays();
+                if ($Api->getRequest()['status'] !== 200 || empty($res)) {
+
+                }
+                $keyboard = array_column($res, 'name');
+//                $keyboard = ['1 день', '3 дня', '7 дней'];
                 if ($text === '' || !in_array($text, $keyboard, true)) {
                     $notes['state'] = 2;
                     $this->conversation->update();
