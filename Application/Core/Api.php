@@ -38,10 +38,10 @@ class Api
         }
     }
 
-    public function addDomain(int $user_id, string $name, int $time, int $day)
+    public function addDomain(array $params)
     {
         try {
-            if (false === ($res = $this->query('api/v1/dictionary/get/days'))) {
+            if (false === ($res = $this->query('api/v1/domain/post/set', $params, 'POST'))) {
                 throw new \Exception('error', 1);
             }
 

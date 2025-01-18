@@ -54,13 +54,8 @@ class DomainaddCommand extends UserCommand
                 $notes['name'] = $text;
                 $text = '';
             case 1:
-                $Api = new Api();
-                $res = $Api->getTimes();
-                if ($Api->getRequest()['status'] !== 200 || empty($res)) {
-
-                }
-                $keyboard = array_column($res, 'name');
-                $keyboard = ['11:00 - 12:00' => 1, '12:00 - 13:00' => 2];
+                $keyboard = array_column($this->getTimes(), 'name');
+//                $keyboard = ['11:00 - 12:00', '12:00 - 13:00'];
                 if ($text === '' || !in_array($text, $keyboard, true)) {
                     $notes['state'] = 1;
                     $this->conversation->update();
@@ -84,12 +79,7 @@ class DomainaddCommand extends UserCommand
                 $notes['time'] = $text;
                 $text = '';
             case 2:
-                $Api = new Api();
-                $res = $Api->getDays();
-                if ($Api->getRequest()['status'] !== 200 || empty($res)) {
-
-                }
-                $keyboard = array_column($res, 'name');
+                $keyboard = array_column($this->getDays(), 'name');
 //                $keyboard = ['1 день', '3 дня', '7 дней'];
                 if ($text === '' || !in_array($text, $keyboard, true)) {
                     $notes['state'] = 2;
@@ -115,12 +105,22 @@ class DomainaddCommand extends UserCommand
                 $text = '';
             case 3:
                 $this->conversation->update();
-                $out_text = '/Survey result:' . PHP_EOL;
+                $keys = ['name', 'time', 'days'];
+                $params = [];
+
+                $out_text = 'Отлично! Ваш домен добавлен.' . PHP_EOL;
                 unset($notes['state']);
                 foreach ($notes as $k => $v) {
+                    $params[$keys[$k]] = $v;
                     $out_text .= PHP_EOL . ucfirst($k) . ': ' . $v;
                 }
-                $data['text'] = $out_text;
+
+                $params['user_id'] = $chat_id;
+                $params['time'] = 1;
+                $params['days'] = 2;
+                $res = $this->addDomain($params);
+
+                $data['text'] = $res ? $out_text : 'Ошибка! Попробуйте позже.';
 
                 $this->conversation->stop();
 
@@ -129,5 +129,35 @@ class DomainaddCommand extends UserCommand
         }
 
         return $result;
+    }
+
+    private function getTimes()
+    {
+        $Api = new Api();
+        $res = $Api->getTimes();
+        if ($Api->getRequest()['status'] !== 200 || empty($res)) {
+
+        }
+        return $res;
+    }
+
+    private function getDays()
+    {
+        $Api = new Api();
+        $res = $Api->getDays();
+        if ($Api->getRequest()['status'] !== 200 || empty($res)) {
+
+        }
+        return $res;
+    }
+
+    private function addDomain(array $res)
+    {
+        $Api = new Api();
+        $res = $Api->addDomain($res);
+        if ($Api->getRequest()['status'] !== 200 || empty($res)) {
+            return false;
+        }
+        return true;
     }
 }
