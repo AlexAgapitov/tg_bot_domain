@@ -111,13 +111,13 @@ class DomainaddCommand extends UserCommand
                 $out_text = 'Отлично! Ваш домен добавлен.' . PHP_EOL;
                 unset($notes['state']);
                 foreach ($notes as $k => $v) {
-                    $params[$keys[$k]] = $v;
+                    $params[$k] = $v;
                     $out_text .= PHP_EOL . ucfirst($k) . ': ' . $v;
                 }
 
                 $params['user_id'] = $chat_id;
-                $params['time'] = 1;
-                $params['days'] = 2;
+//                $params['time'] = 1;
+//                $params['days'] = 2;
                 $res = $this->addDomain($params);
 
                 $data['text'] = ($res ? $out_text : 'Ошибка! Попробуйте позже.').json_encode($params);
