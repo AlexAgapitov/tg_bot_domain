@@ -54,6 +54,22 @@ class Api
         }
     }
 
+    public function getDomains(array $params)
+    {
+        try {
+            if (false === ($res = $this->query('api/v1/domain/post/get', $params, 'POST'))) {
+                throw new \Exception('error', 1);
+            }
+
+            if (null === ($res = $this->parse($res))) {
+                throw new \Exception('error', 1);
+            }
+            return $res ?? [];
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
 
     private function query(string $path, array $params = [], string $method = 'GET')
     {
