@@ -32,7 +32,7 @@ class DomainRepository implements DomainRepositoryInterface
     public function save(Domain $domain): void
     {
         $sql_q = "INSERT INTO `data_domains` SET 
-                   `name` = ".self::$Db->quote($domain->getName()->getValue()).",
+                   `name` = ".Database::getDB()->quote($domain->getName()->getValue()).",
                    `time` = ".$domain->getDays()->getValue().",
                    `days` = ".$domain->getTime()->getValue().",
                    `user_id` = ".$domain->getUserId()->getValue().",
