@@ -64,7 +64,7 @@ class Api
             if (null === ($res = $this->parse($res))) {
                 throw new \Exception('error', 1);
             }
-            return $res ?? [];
+            return $res['domains'] ?? [];
         } catch (\Exception $e) {
             return null;
         }

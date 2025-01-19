@@ -115,7 +115,8 @@ class AddCommand extends UserCommand
                     $out_text .= PHP_EOL . ucfirst($k) . ': ' . $v;
                 }
 
-                $params['user_id'] = $chat_id;
+                $params['user_id'] = $user_id;
+                $params['chat_id'] = $chat_id;
                 $params['time'] = 1;
                 $params['days'] = 2;
                 $res = $this->addDomain($params);
