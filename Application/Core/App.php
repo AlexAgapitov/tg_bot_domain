@@ -41,7 +41,7 @@ class App
             });
 
             $app->post('/api/v1/domain/post/get', function () use ($app) {
-                return self::buildSuccess(['days' => Router::getDomains()]);
+                return self::buildSuccess(['domains' => Router::getDomains()]);
             });
 
 //            $app['debug'] = true;
