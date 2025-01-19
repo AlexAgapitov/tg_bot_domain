@@ -9,7 +9,7 @@ use Longman\TelegramBot\Commands\UserCommand;
 class ListCommand extends UserCommand
 {
     protected $name = 'list';
-    protected $description = 'A command for get list domains';
+    protected $description = 'Команда для получения списка добавленных доменов';
     protected $usage = '/list';
     protected $version = '1.0.0';
     protected $need_mysql = false;

@@ -6,15 +6,25 @@ use Core\Api;
 use Longman\TelegramBot\Commands\UserCommand;
 use Longman\TelegramBot\Conversation;
 use Longman\TelegramBot\Entities\Keyboard;
+use Longman\TelegramBot\Entities\Update;
 use Longman\TelegramBot\Request;
+use Longman\TelegramBot\Telegram;
 
 class AddCommand extends UserCommand
 {
     protected $name = 'add';
-    protected $description = 'A command for add domain';
+    protected $description = 'Команда для добавления домена';
     protected $usage = '/add';
     protected $version = '1.0.0';
     protected $need_mysql = false;
+
+    private Api $Api;
+
+    public function __construct(Telegram $telegram, ?Update $update = null)
+    {
+        parent::__construct($telegram, $update);
+        $this->Api = new Api();
+    }
 
     public function execute(): \Longman\TelegramBot\Entities\ServerResponse
     {
@@ -54,7 +64,8 @@ class AddCommand extends UserCommand
                 $notes['name'] = $text;
                 $text = '';
             case 1:
-                $keyboard = array_column($this->getTimes(), 'name');
+                $res = $this->execApiFunc('getTimes', [], $error);
+                $keyboard = array_column($res, 'name');
 //                $keyboard = ['11:00 - 12:00', '12:00 - 13:00'];
                 if ($text === '' || !in_array($text, $keyboard, true)) {
                     $notes['state'] = 1;
@@ -79,7 +90,8 @@ class AddCommand extends UserCommand
                 $notes['time'] = $text;
                 $text = '';
             case 2:
-                $keyboard = array_column($this->getDays(), 'name');
+                $res = $this->execApiFunc('getDays', [], $error);
+                $keyboard = array_column($res, 'name');
 //                $keyboard = ['1 день', '3 дня', '7 дней'];
                 if ($text === '' || !in_array($text, $keyboard, true)) {
                     $notes['state'] = 2;
@@ -119,9 +131,9 @@ class AddCommand extends UserCommand
                 $params['chat_id'] = $chat_id;
                 $params['time'] = 1;
                 $params['days'] = 2;
-                $res = $this->addDomain($params);
+                $res = $this->execApiFunc('addDomain', $params, $error);
 
-                $data['text'] = ($res ? $out_text : 'Ошибка! Попробуйте позже.');
+                $data['text'] = ($res ? $out_text : ($error ?? 'Ошибка! Попробуйте позже.'));
 
                 $this->conversation->stop();
 
@@ -132,33 +144,13 @@ class AddCommand extends UserCommand
         return $result;
     }
 
-    private function getTimes()
+    private function execApiFunc(string $method, array $params = [], string &$error = null)
     {
-        $Api = new Api();
-        $res = $Api->getTimes();
-        if ($Api->getRequest()['status'] !== 200 || empty($res)) {
-
-        }
-        return $res;
-    }
-
-    private function getDays()
-    {
-        $Api = new Api();
-        $res = $Api->getDays();
-        if ($Api->getRequest()['status'] !== 200 || empty($res)) {
-
-        }
-        return $res;
-    }
-
-    private function addDomain(array $res)
-    {
-        $Api = new Api();
-        $res = $Api->addDomain($res);
-        if ($Api->getRequest()['status'] !== 200 || empty($res)) {
+        $res = $this->Api->$method($params);
+        if ($this->Api->getRequest()['status'] !== 200 || empty($res)) {
+            $error = $this->Api->getMessage() ?? null;
             return false;
         }
-        return true;
+        return $res;
     }
 }

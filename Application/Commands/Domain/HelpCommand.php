@@ -9,24 +9,9 @@ use Longman\TelegramBot\Exception\TelegramException;
 
 class HelpCommand extends UserCommand
 {
-    /**
-     * @var string
-     */
     protected $name = 'help';
-
-    /**
-     * @var string
-     */
-    protected $description = 'Show bot commands help';
-
-    /**
-     * @var string
-     */
+    protected $description = 'Команда для получения списка доступных команд';
     protected $usage = '/help or /help <command>';
-
-    /**
-     * @var string
-     */
     protected $version = '1.4.0';
 
     /**
@@ -47,7 +32,7 @@ class HelpCommand extends UserCommand
 
         // If no command parameter is passed, show the list.
         if ($command_str === '') {
-            $text = '*Commands List*:' . PHP_EOL;
+            $text = '*Список команд*:' . PHP_EOL;
             foreach ($user_commands as $user_command) {
                 $text .= '/' . $user_command->getName() . ' - ' . $user_command->getDescription() . PHP_EOL;
             }
@@ -79,7 +64,7 @@ class HelpCommand extends UserCommand
             ), ['parse_mode' => 'markdown']);
         }
 
-        return $this->replyToChat('No help available: Command `/' . $command_str . '` not found', ['parse_mode' => 'markdown']);
+        return $this->replyToChat('Справка не доступна: Команда `/' . $command_str . '` не найдена', ['parse_mode' => 'markdown']);
     }
 
     /**
