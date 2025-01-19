@@ -13,6 +13,15 @@ class Router
     {
         try {
             $params = self::$params['POST'];
+
+            $url = parse_url($params['name']);
+
+            $params['name'] = $url['host'] ?? $url['path'];
+
+            if (empty($params['name'])) {
+                throw new \Exception('Error format domain');
+            }
+
             $Repository = new \Src\Infrastructure\Repository\DomainRepository();
             $Factory = new \Src\Infrastructure\Factory\CommonDomainFactory();
             $UseCase = new \Src\Application\UseCase\SubmitDomain\SubmitDomainUseCase($Factory, $Repository);
@@ -49,6 +58,18 @@ class Router
         $result = $Command($Request);
 
         return $result->days;
+    }
+
+    public static function getDomains(): array
+    {
+        $params = self::$params['POST'];
+        $Repository = new \Src\Infrastructure\Repository\DomainRepository();
+        $UseCase = new \Src\Application\UseCase\GetDomains\GetDomainsUseCase($Repository);
+        $Command = new \Src\Infrastructure\Command\GetDomainsCommand($UseCase);
+        $Request = new \Src\Application\UseCase\GetDomains\GetDomainsRequest($params['user_id']);
+        $result = $Command($Request);
+
+        return $result->domains;
     }
 
     public static function getErrorMessage(): ?string

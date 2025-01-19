@@ -120,7 +120,7 @@ class AddCommand extends UserCommand
                 $params['days'] = 2;
                 $res = $this->addDomain($params);
 
-                $data['text'] = ($res ? $out_text : 'Ошибка! Попробуйте позже.').json_encode($params);
+                $data['text'] = ($res ? $out_text : 'Ошибка! Попробуйте позже.');
 
                 $this->conversation->stop();
 
