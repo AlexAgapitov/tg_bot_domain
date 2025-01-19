@@ -85,9 +85,12 @@ class AddCommand extends UserCommand
 
                     $result = Request::sendMessage($data);
                     break;
+                } else {
+                    $search_id = array_search($text, $keyboard);
+                    $id = $res[$search_id]['id'];
                 }
 
-                $notes['time'] = $text;
+                $notes['time'] = $id;
                 $text = '';
             case 2:
                 $res = $this->execApiFunc('getDays', [], $error);
@@ -111,20 +114,21 @@ class AddCommand extends UserCommand
 
                     $result = Request::sendMessage($data);
                     break;
+                } else {
+                    $search_id = array_search($text, $keyboard);
+                    $id = $res[$search_id]['id'];
                 }
 
-                $notes['days'] = $text;
+                $notes['days'] = $id;
                 $text = '';
             case 3:
                 $this->conversation->update();
-                $keys = ['name', 'time', 'days'];
                 $params = [];
 
-                $out_text = 'Отлично! Ваш домен добавлен.' . PHP_EOL;
+                $out_text = 'Отлично! Ваш домен успешно добавлен.' . PHP_EOL;
                 unset($notes['state']);
                 foreach ($notes as $k => $v) {
                     $params[$k] = $v;
-                    $out_text .= PHP_EOL . ucfirst($k) . ': ' . $v;
                 }
 
                 $params['user_id'] = $user_id;
@@ -133,7 +137,7 @@ class AddCommand extends UserCommand
                 $params['days'] = 2;
                 $res = $this->execApiFunc('addDomain', $params, $error);
 
-                $data['text'] = ($res ? $out_text : ($error ?? 'Ошибка! Попробуйте позже.'));
+                $data['text'] = ($res ? $out_text : ('Ошибка!'.PHP_EOL.($error ?? 'Попробуйте позже.')));
 
                 $this->conversation->stop();
 
