@@ -25,19 +25,19 @@ class App
             });
 
             $app->get('/api/v1/dictionary/get/times', function () use ($app) {
-                return self::buildAnswer(self::buildSuccess(['times' => Router::getTimes()]));
+                return self::buildSuccess(['times' => Router::getTimes()]);
             });
 
             $app->get('/api/v1/dictionary/get/days', function () use ($app) {
-                return self::buildAnswer(self::buildSuccess(['days' => Router::getDays()]));
+                return self::buildSuccess(['days' => Router::getDays()]);
             });
 
             $app->post('/api/v1/domain/post/set', function () use ($app) {
-                return self::buildAnswer(
+                return
                     false !== ($id = Router::addDomain())
                     ? self::buildSuccess(['id' => $id])
                     : self::buildError(['message' => Router::getErrorMessage()])
-                );
+                ;
             });
 
             $app['debug'] = true;
@@ -67,27 +67,26 @@ class App
         }
     }
 
-    private static function buildAnswer(array $content): JsonResponse
+    private function buildSuccess(array $content): JsonResponse
     {
         $response = new JsonResponse();
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
-        $response->setData($content);
+        $response->setData([
+            'ok' => 1,
+            'content' => $content,
+        ]);
         return $response;
     }
 
-    private function buildSuccess(array $content): array
+    private function buildError(array $content): JsonResponse
     {
-        return [
-            'ok' => 1,
-            'content' => $content,
-        ];
-    }
-
-    private function buildError(array $content): array
-    {
-        return [
+        $response = new JsonResponse();
+        $response->setEncodingOptions(JSON_NUMERIC_CHECK);
+        $response->setData([
             'ok' => 0,
             'content' => $content,
-        ];
+        ]);
+        $response->setStatusCode(400);
+        return $response;
     }
 }

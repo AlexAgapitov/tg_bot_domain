@@ -7,6 +7,7 @@ use PDO;
 class Database
 {
     public static PDO $DB;
+    private static array $settings;
 
     public static function getDB()
     {
@@ -18,5 +19,16 @@ class Database
             self::$DB->query('SET SESSION group_concat_max_len = ~0;');
         }
         return self::$DB;
+    }
+
+    public static function getSetting(): array
+    {
+        if (!isset(self::$settings)) {
+            $res = self::getDB()->query('SELECT * FROM `system_settings`');
+            foreach ($res ?? [] AS $row) {
+                self::$settings[$row['key']] = $row['value'];
+            }
+        }
+        return self::$settings;
     }
 }
