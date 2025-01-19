@@ -133,8 +133,6 @@ class AddCommand extends UserCommand
 
                 $params['user_id'] = $user_id;
                 $params['chat_id'] = $chat_id;
-                $params['time'] = 1;
-                $params['days'] = 2;
                 $res = $this->execApiFunc('addDomain', $params, $error);
 
                 $data['text'] = ($res ? $out_text : ('Ошибка!'.PHP_EOL.($error ?? 'Попробуйте позже.')));
