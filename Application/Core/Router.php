@@ -24,12 +24,13 @@ class Router
 
             $Repository = new \Src\Infrastructure\Repository\DomainRepository();
             $Factory = new \Src\Infrastructure\Factory\CommonDomainFactory();
-            $UseCase = new \Src\Application\UseCase\SubmitDomain\SubmitDomainUseCase($Factory, $Repository);
+            $PayDate = new \Src\Infrastructure\Utils\Whois();
+            $UseCase = new \Src\Application\UseCase\SubmitDomain\SubmitDomainUseCase($Factory, $Repository, $PayDate);
             $Command = new \Src\Infrastructure\Command\SubmitDomainCommand($UseCase);
             $Request = new \Src\Application\UseCase\SubmitDomain\SubmitDomainRequest($params['user_id'], $params['name'], $params['time'], $params['days']);
             $result = $Command($Request);
 
-            return $result->id;
+            return $result;
         } catch (\Exception $e) {
             self::$error_message = $e->getMessage();
             return false;

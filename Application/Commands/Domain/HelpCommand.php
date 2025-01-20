@@ -44,7 +44,7 @@ class HelpCommand extends UserCommand
                 }
             }
 
-            $text .= PHP_EOL . 'For exact command help type: /help <command>';
+            $text .= PHP_EOL . 'Для точной справки по команде введите: /help <command>';
 
             return $this->replyToChat($text, ['parse_mode' => 'markdown']);
         }
@@ -54,9 +54,9 @@ class HelpCommand extends UserCommand
             $command = $all_commands[$command_str];
 
             return $this->replyToChat(sprintf(
-                'Command: %s (v%s)' . PHP_EOL .
-                'Description: %s' . PHP_EOL .
-                'Usage: %s',
+                'Команда: %s (v%s)' . PHP_EOL .
+                'Описание: %s' . PHP_EOL .
+                'Использование: %s',
                 $command->getName(),
                 $command->getVersion(),
                 $command->getDescription(),

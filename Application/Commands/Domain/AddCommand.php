@@ -135,6 +135,11 @@ class AddCommand extends UserCommand
                 $params['chat_id'] = $chat_id;
                 $res = $this->execApiFunc('addDomain', $params, $error);
 
+                if (!empty($res)) {
+                    $out_text = "Отлично! Ваш домен {$res['name']} добавлен." . PHP_EOL
+                        . "Крайняя дата оплаты: ".(new \DateTime($res['payDate']))->format('d.m.Y').'.';
+                }
+
                 $data['text'] = ($res ? $out_text : ('Ошибка!'.PHP_EOL.($error ?? 'Попробуйте позже.')));
 
                 $this->conversation->stop();

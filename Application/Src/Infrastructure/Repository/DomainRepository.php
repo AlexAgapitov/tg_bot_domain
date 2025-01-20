@@ -33,6 +33,7 @@ class DomainRepository implements DomainRepositoryInterface
     {
         $sql_q = "INSERT INTO `data_domains` SET 
                    `name` = ".Database::getDB()->quote($domain->getName()->getValue()).",
+                   `pay_date` = ".Database::getDB()->quote($domain->getPayDate()->getValue()->format('Y-m-d H:i:s')).",
                    `time` = ".$domain->getDays()->getValue().",
                    `days` = ".$domain->getTime()->getValue().",
                    `user_id` = ".$domain->getUserId()->getValue().",
