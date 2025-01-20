@@ -82,7 +82,8 @@ class Router
     {
         self::$params = [
             'GET' => $_GET,
-            'POST' => json_decode(file_get_contents('php://input'), true) ?? [],
+//            'POST' => json_decode(file_get_contents('php://input'), true) ?? [],
+            'POST' => $_POST,
         ];
     }
 }

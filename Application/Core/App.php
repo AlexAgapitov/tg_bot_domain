@@ -34,8 +34,8 @@ class App
 
             $app->post('/api/v1/domain/post/set', function () use ($app) {
                 return
-                    false !== ($id = Router::addDomain())
-                    ? self::buildSuccess(['id' => $id])
+                    false !== ($data = Router::addDomain())
+                    ? self::buildSuccess(['data' => $data])
                     : self::buildError(['message' => Router::getErrorMessage()])
                 ;
             });
