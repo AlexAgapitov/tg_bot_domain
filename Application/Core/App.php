@@ -3,8 +3,12 @@
 namespace Core;
 
 use Exception;
+use Silex\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+use Symfony\Component\Validator\Validation;
+use Symfony\Component\Validator\Constraints as Assert;
 
 class App
 {
@@ -21,7 +25,7 @@ class App
                     $data = json_decode($request->getContent(), true);
                     $request->request->replace(is_array($data) ? $data : array());
                 }
-                Router::setParams();
+//                Router::setParams();
             });
 
             $app->get('/api/v1/dictionary/get/times', function () use ($app) {
@@ -32,19 +36,36 @@ class App
                 return self::buildSuccess(['days' => Router::getDays()]);
             });
 
-            $app->post('/api/v1/domain/post/set', function () use ($app) {
+            $app->post('/api/v1/domain/post/set', function (Request $request) use ($app) {
                 return
-                    false !== ($data = Router::addDomain())
+                    false !== ($data = Router::addDomain($request->request->all()))
                     ? self::buildSuccess(['data' => $data])
                     : self::buildError(['message' => Router::getErrorMessage()])
                 ;
+            })->before(function (Request $request) use ($app) {
+                $constraint = new Assert\Collection([
+                    'user_id' => new Assert\Positive(),
+                    'name' => new Assert\Length(['min' => 1]),
+                    'time' => new Assert\Positive(),
+                    'days' => new Assert\Positive(),
+                ]);
+                self::validation($request->request->all(), $constraint, $app);
             });
 
-            $app->post('/api/v1/domain/post/get', function () use ($app) {
-                return self::buildSuccess(['domains' => Router::getDomains()]);
+            $app->post('/api/v1/domain/post/get', function (Request $request) use ($app) {
+                return self::buildSuccess(['domains' => Router::getDomains($request->request->all())]);
+            })->before(function (Request $request) use ($app) {
+                $constraint = new Assert\Collection([
+                    'user_id' => new Assert\Positive()
+                ]);
+                self::validation($request->request->all(), $constraint, $app);
             });
 
-//            $app['debug'] = true;
+            $app->error(function (\Exception $e) use ($app) {
+                if ($e instanceof BadRequestHttpException) {
+                    return self::buildError(['message' => $e->getMessage()]);
+                }
+            });
 
             $app->run();
 
@@ -57,7 +78,7 @@ class App
                     if (empty($array)) {
                         throw new Exception('Error in string');
                     }
-                    Router::addDomain();
+                    Router::addDomain($array);
                     break;
                 case 'getTimes':
                     Router::getTimes();
@@ -71,7 +92,23 @@ class App
         }
     }
 
-    private function buildSuccess(array $content): JsonResponse
+    private static function validation(array $inputs, Assert\Collection $constraint, Application $app)
+    {
+        $validator = Validation::createValidator();
+
+
+        $violations = $validator->validate($inputs, $constraint);
+
+        if (count($violations) > 0) {
+//            $errors = [];
+//            foreach ($violations AS $violation) {
+//                $errors[] = $violation->getPropertyPath();
+//            }
+            throw new BadRequestHttpException('Validation error');
+        }
+    }
+
+    private static function buildSuccess(array $content): JsonResponse
     {
         $response = new JsonResponse();
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);
@@ -82,7 +119,7 @@ class App
         return $response;
     }
 
-    private function buildError(array $content): JsonResponse
+    private static function buildError(array $content): JsonResponse
     {
         $response = new JsonResponse();
         $response->setEncodingOptions(JSON_NUMERIC_CHECK);

@@ -9,10 +9,10 @@ class Router
     private static string $error_message;
     private static int $error_code;
 
-    public static function addDomain()
+    public static function addDomain(array $params)
     {
         try {
-            $params = self::$params['POST'];
+//            $params = self::$params['POST'];
 
             $url = parse_url($params['name']);
 
@@ -61,9 +61,9 @@ class Router
         return $result->days;
     }
 
-    public static function getDomains(): array
+    public static function getDomains($params): array
     {
-        $params = self::$params['POST'];
+//        $params = self::$params['POST'];
         $Repository = new \Src\Infrastructure\Repository\DomainRepository();
         $UseCase = new \Src\Application\UseCase\GetDomains\GetDomainsUseCase($Repository);
         $Command = new \Src\Infrastructure\Command\GetDomainsCommand($UseCase);
@@ -78,12 +78,12 @@ class Router
         return self::$error_message ?? '';
     }
 
-    public static function setParams()
-    {
-        self::$params = [
-            'GET' => $_GET,
-            'POST' => json_decode(file_get_contents('php://input'), true) ?? [],
-//            'POST' => $_POST,
-        ];
-    }
+//    public static function setParams()
+//    {
+//        self::$params = [
+//            'GET' => $_GET,
+//            'POST' => json_decode(file_get_contents('php://input'), true) ?? [],
+////            'POST' => $_POST,
+//        ];
+//    }
 }
