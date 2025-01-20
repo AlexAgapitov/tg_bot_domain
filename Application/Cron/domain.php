@@ -11,6 +11,9 @@ require_once __DIR__.'/../autoload.php';
 $dotenv = Dotenv\Dotenv::createImmutable(__DIR__.'/../');
 $dotenv->load();
 
+\Core\TgBot::sendMessage(804909340, 'test');
+exit;
+
 $sql_q = "
 SELECT d.name AS domain_name, days.value AS days
 FROM data_domains AS d
