@@ -137,7 +137,7 @@ class AddCommand extends UserCommand
 
                 if (!empty($res)) {
                     $out_text = "Отлично! Ваш домен {$res['name']} добавлен." . PHP_EOL
-                        . "Крайняя дата оплаты: ".(new \DateTime($res['payDate']))->format('d.m.Y').'.';
+                        . "Крайняя дата оплаты: ".(new \DateTime($res['payDate']))->format('d.m.Y').'.'.json_encode($res);
                 }
 
                 $data['text'] = ($res ? $out_text : ('Ошибка!'.PHP_EOL.($error ?? 'Попробуйте позже.')));
