@@ -70,7 +70,6 @@ class DomainRepository implements DomainRepositoryInterface
     {
         $ans = null;
         $date = new DateTime();
-        $date = new DateTime('2026-12-12 21:00:00');
         $hours = $date->format('H');
         $date_Ymd = $date->format('Y-m-d');
 

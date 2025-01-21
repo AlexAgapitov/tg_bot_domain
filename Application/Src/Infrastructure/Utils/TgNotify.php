@@ -9,7 +9,7 @@ class TgNotify implements NotifyInterface
 
     public function payDate(int $user_id, string $domain, string $pay_date): void
     {
-        $message = "Дата оплаты домена {$domain} уже близко! Домен оплачен до " . $pay_date;
+        $message = "Дата оплаты домена {$domain} уже близко! " . PHP_EOL . "Домен оплачен до " . $pay_date;
         \Core\TgBot::sendMessage($user_id, $message);
     }
 }

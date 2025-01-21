@@ -66,7 +66,7 @@ class App
                 }
             });
 
-            $app['debug'] = true;
+//            $app['debug'] = true;
 
             $app->run();
 
@@ -105,8 +105,8 @@ class App
 //            foreach ($violations AS $violation) {
 //                $errors[] = $violation->getPropertyPath();
 //            }
-            var_dump($inputs);
-            var_dump($violations);exit;
+//            var_dump($inputs);
+//            var_dump($violations);exit;
             throw new BadRequestHttpException('Validation error');
         }
     }
