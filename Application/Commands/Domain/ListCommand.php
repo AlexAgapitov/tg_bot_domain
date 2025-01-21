@@ -23,7 +23,6 @@ class ListCommand extends UserCommand
         $user_id = $user->getId();
 
         $params['user_id'] = $user_id;
-        $params['chat_id'] = $chat_id;
 
         $domains = $this->getDomains($params) ?? [];
 
