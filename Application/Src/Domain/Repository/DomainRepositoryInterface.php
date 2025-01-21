@@ -15,5 +15,7 @@ interface DomainRepositoryInterface
 
     public function save(Domain $domain): void;
 
-    public function delete(Domain $domain): void;
+    public function findForCheck(): ?Domain;
+
+    public function updateForCheck(Domain $domain, string $pay_date = null): void;
 }

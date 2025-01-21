@@ -21,16 +21,20 @@ class SubmitDomainUseCase
 
     public function __invoke(SubmitDomainRequest $request): SubmitDomainResponse
     {
-        $payDate = $this->payDate->getPayDate($request->name);
+        $pay_date = $this->payDate->getPayDate($request->name);
 
-        $domain = $this->factory->create($request->userId, $request->name, $request->days, $request->time, $payDate);
+        if (empty($pay_date)) {
+            throw new \Exception('Pay date not found');
+        }
+
+        $domain = $this->factory->create($request->user_id, $request->name, $request->days, $request->time, $pay_date);
 
         $this->repository->save($domain);
 
         return new SubmitDomainResponse(
             $domain->getId(),
             $domain->getName()->getValue(),
-            $payDate->format('Y-m-d H:i:s')
+            $pay_date
         );
     }
 }

@@ -2,18 +2,16 @@
 
 namespace Src\Domain\ValueObject;
 
-use DateTime;
-
 class PayDate
 {
-    private DateTime $value;
+    private string $value;
 
-    public function __construct(DateTime $value)
+    public function __construct(string $value)
     {
         $this->value = $value;
     }
 
-    public function getValue(): DateTime
+    public function getValue(): string
     {
         return $this->value;
     }

@@ -6,7 +6,7 @@ use PDO;
 
 class Database
 {
-    public static PDO $DB;
+    private static PDO $DB;
     private static array $settings;
 
     public static function getDB()

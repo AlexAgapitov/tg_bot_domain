@@ -12,14 +12,14 @@ use Src\Domain\ValueObject\Time;
 
 class CommonDomainFactory implements DomainFactoryInterface
 {
-    public function create(int $userId, string $name, int $days, int $time, \DateTime $payDate): Domain
+    public function create(int $user_id, string $name, int $days, int $time, string $pay_date): Domain
     {
         return new Domain(
-            new UserId($userId),
+            new UserId($user_id),
             new Name($name),
             new Time($time),
             new Days($days),
-            new PayDate($payDate)
+            new PayDate($pay_date)
         );
     }
 }

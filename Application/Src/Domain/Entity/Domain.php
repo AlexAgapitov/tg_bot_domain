@@ -10,20 +10,20 @@ use Src\Domain\ValueObject\Days;
 
 class Domain
 {
-    private UserId $userId;
+    private UserId $user_id;
     private Name $name;
     private Time $time;
     private Days $days;
-    private PayDate $payDate;
+    private PayDate $pay_date;
     private ?int $id;
 
-    public function __construct(UserId $userId, Name $name, Time $time, Days $days, PayDate $payDate)
+    public function __construct(UserId $user_id, Name $name, Time $time, Days $days, PayDate $pay_date)
     {
-        $this->userId = $userId;
+        $this->user_id = $user_id;
         $this->name = $name;
         $this->time = $time;
         $this->days = $days;
-        $this->payDate = $payDate;
+        $this->pay_date = $pay_date;
     }
 
     public function getName(): Name
@@ -43,12 +43,12 @@ class Domain
 
     public function getUserId(): UserId
     {
-        return $this->userId;
+        return $this->user_id;
     }
 
     public function getPayDate(): PayDate
     {
-        return $this->payDate;
+        return $this->pay_date;
     }
 
     public function getId(): ?int

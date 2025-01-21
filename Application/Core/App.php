@@ -25,7 +25,6 @@ class App
                     $data = json_decode($request->getContent(), true);
                     $request->request->replace(is_array($data) ? $data : array());
                 }
-//                Router::setParams();
             });
 
             $app->get('/api/v1/dictionary/get/times', function () use ($app) {

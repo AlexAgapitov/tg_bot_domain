@@ -4,11 +4,11 @@ namespace Src\Application\UseCase\GetDomains;
 
 class GetDomainsRequest
 {
-    public int $userId;
+    public int $user_id;
     public function __construct(
-        int $userId
+        int $user_id
     )
     {
-        $this->userId = $userId;
+        $this->user_id = $user_id;
     }
 }

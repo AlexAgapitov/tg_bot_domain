@@ -37,6 +37,24 @@ class Router
         }
     }
 
+    public static function checkPayDate()
+    {
+        try {
+            $Repository = new \Src\Infrastructure\Repository\DomainRepository();
+            $PayDate = new \Src\Infrastructure\Utils\Whois();
+            $Notify = new \Src\Infrastructure\Utils\TgNotify();
+            $UseCase = new \Src\Application\UseCase\CheckPayDate\CheckPayDateUseCase($Repository, $PayDate, $Notify);
+            $Command = new \Src\Infrastructure\Command\CheckPayDateCommand($UseCase);
+            $Request = new \Src\Application\UseCase\CheckPayDate\CheckPayDateRequest();
+            $result = $Command($Request);
+
+            return $result->pay_date;
+        } catch (\Exception $e) {
+            self::$error_message = $e->getMessage();
+            return false;
+        }
+    }
+
     public static function getTimes(): array
     {
         $Repository = new \Src\Infrastructure\Repository\TimesRepository();

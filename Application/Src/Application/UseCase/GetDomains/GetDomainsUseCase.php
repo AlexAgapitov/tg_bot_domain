@@ -17,7 +17,7 @@ class GetDomainsUseCase
     public function __invoke(GetDomainsRequest $request): GetDomainsResponse
     {
         $answer = [];
-        $domains = $this->repository->findByUserId($request->userId);
+        $domains = $this->repository->findByUserId($request->user_id);
 
         foreach ($domains ?? [] AS $domain) {
             $answer[] = [

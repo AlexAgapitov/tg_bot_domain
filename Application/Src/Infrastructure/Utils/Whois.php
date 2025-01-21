@@ -24,25 +24,21 @@ class Whois implements PayDateInterface
         return $answer;
     }
 
-    public function getPayDate(string $domain): ?DateTime
+    public function getPayDate(string $domain): ?string
     {
         $keys = json_decode(Database::getSetting()['domain_pay_text_search'] ?? '', true);
-        $payDate = null;
+        $pay_date = null;
         $answer = $this->exec($domain);
 
         if (!empty($answer)) {
             foreach ($answer as $key => $value) {
                 if (in_array($key, $keys)) {
-                    $payDate = new DateTime($value);
+                    $pay_date = (new DateTime($value))->format('Y-m-d H:i:s');
                     break;
                 }
             }
         }
 
-        if (empty($payDate)) {
-            throw new \Exception('Pay date not found');
-        }
-
-        return $payDate;
+        return $pay_date;
     }
 }
