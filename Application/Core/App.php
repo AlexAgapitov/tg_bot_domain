@@ -66,6 +66,8 @@ class App
                 }
             });
 
+            $app['debug'] = true;
+
             $app->run();
 
         } else {
