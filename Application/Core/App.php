@@ -105,6 +105,7 @@ class App
 //            foreach ($violations AS $violation) {
 //                $errors[] = $violation->getPropertyPath();
 //            }
+            var_dump($violations);exit;
             throw new BadRequestHttpException('Validation error');
         }
     }
