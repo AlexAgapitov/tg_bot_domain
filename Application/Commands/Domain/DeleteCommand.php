@@ -55,61 +55,62 @@ class DeleteCommand extends UserCommand
         $domains = $Api->getDomains($params);
         $message = null;
 
-        if ($Api->getRequest()['status'] !== 200 || null === $domains) {
-            return $this->replyToChat("Ошибка! Команда в данный момент недоступна. Попробуйте позже.");
-        }
+        if ($Api->getRequest()['status'] !== 200 || empty($domains)) {
+            $data['text'] = "Ошибка! Команда в данный момент недоступна. Попробуйте позже.";
+            $result = Request::sendMessage($data);
+        } else {
+            switch ($state) {
+                case 0:
+                    $keyboard = array_column($domains, 'name');
+                    if ($text === '' || !in_array($text, $keyboard, true)) {
+                        $notes['state'] = 0;
+                        $this->conversation->update();
 
-        switch ($state) {
-            case 0:
-                $keyboard = array_column($domains, 'name');
-                if ($text === '' || !in_array($text, $keyboard, true)) {
-                    $notes['state'] = 0;
-                    $this->conversation->update();
+                        $data['reply_markup'] = (new Keyboard($keyboard))
+                            ->setResizeKeyboard(true)
+                            ->setOneTimeKeyboard(true)
+                            ->setSelective(true);
 
-                    $data['reply_markup'] = (new Keyboard($keyboard))
-                        ->setResizeKeyboard(true)
-                        ->setOneTimeKeyboard(true)
-                        ->setSelective(true);
+                        $message_text = 'Выберите домен, который вы хотите удалить';
 
-                    $message_text = 'Выберите домен, который вы хотите удалить';
-
-                    $data['text'] = $message_text;
-                    if ($text !== '') {
                         $data['text'] = $message_text;
+                        if ($text !== '') {
+                            $data['text'] = $message_text;
+                        }
+
+                        $result = Request::sendMessage($data);
+                        break;
+                    } else {
+                        $search_id = array_search($text, $keyboard);
+                        $id = $domains[$search_id]['id'];
                     }
+
+                    $notes['domain_id'] = $id;
+                    $text = '';
+                case 1:
+                    $this->conversation->update();
+                    $params = [];
+                    unset($notes['state']);
+                    foreach ($notes as $k => $v) {
+                        $params[$k] = $v;
+                    }
+
+                    $params['user_id'] = $user_id;
+
+                    $out_text = null;
+                    $Api = new Api();
+                    $res = $Api->deleteDomain($params);
+                    if ($Api->getRequest()['status'] !== 200 || null === $res) {
+                        $data['text'] = "Ошибка! Команда в данный момент недоступна. Попробуйте позже.";
+                    } else {
+                        $data['text'] = "Отлично! Ваш домен успешно удален.";
+                    }
+
+                    $this->conversation->stop();
 
                     $result = Request::sendMessage($data);
                     break;
-                } else {
-                    $search_id = array_search($text, $keyboard);
-                    $id = $domains[$search_id]['id'];
-                }
-
-                $notes['domain_id'] = $id;
-                $text = '';
-            case 3:
-                $this->conversation->update();
-                $params = [];
-                unset($notes['state']);
-                foreach ($notes as $k => $v) {
-                    $params[$k] = $v;
-                }
-
-                $params['user_id'] = $user_id;
-
-                $out_text = null;
-                $Api = new Api();
-                $res = $Api->deleteDomain($params);
-                if ($Api->getRequest()['status'] !== 200 || null === $res) {
-                    $data['text'] = "Ошибка! Команда в данный момент недоступна. Попробуйте позже.";
-                } else {
-                    $data['text'] = "Отлично! Ваш домен успешно удален.";
-                }
-
-                $this->conversation->stop();
-
-                $result = Request::sendMessage($data);
-                break;
+            }
         }
 
         return $result;
