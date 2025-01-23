@@ -62,7 +62,7 @@ class App
 
             $app->post('/api/v1/domain/post/delete', function (Request $request) use ($app) {
                 return
-                    false !== ($data = Router::deleteDomain($request->request->all()))
+                    false !== Router::deleteDomain($request->request->all())
                         ? self::buildSuccess([])
                         : self::buildError(['message' => Router::getErrorMessage()])
                     ;

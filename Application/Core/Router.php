@@ -64,7 +64,7 @@ class Router
             $Request = new \Src\Application\UseCase\DeleteDomain\DeleteDomainRequest($params['user_id'], $params['domain_id']);
             $result = $Command($Request);
 
-            return $result->pay_date;
+            return $result;
         } catch (\Exception $e) {
             self::$error_message = $e->getMessage();
             return false;
