@@ -101,14 +101,10 @@ class DeleteCommand extends UserCommand
                 $Api = new Api();
                 $res = $Api->deleteDomain($params);
                 if ($Api->getRequest()['status'] !== 200 || null === $res) {
-                    return $this->replyToChat("Ошибка! Команда в данный момент недоступна. Попробуйте позже.".json_encode($params));
+                    $data['text'] = "Ошибка! Команда в данный момент недоступна. Попробуйте позже.";
+                } else {
+                    $data['text'] = "Отлично! Ваш домен успешно удален.";
                 }
-
-                if (!empty($res)) {
-                    $out_text = "Отлично! Ваш домен {$res['data']['name']} успешно удален.";
-                }
-
-                $data['text'] = $out_text;
 
                 $this->conversation->stop();
 
