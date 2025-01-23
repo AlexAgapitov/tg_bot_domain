@@ -2,6 +2,8 @@
 
 namespace Core;
 
+use Diversen\Lang;
+
 class Router
 {
     public static array $params = [];
@@ -109,7 +111,7 @@ class Router
 
     public static function getErrorMessage(): ?string
     {
-        return self::$error_message ?? '';
+        return Lang::t(self::$error_message ?? '');
     }
 
 //    public static function setParams()

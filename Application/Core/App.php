@@ -2,6 +2,7 @@
 
 namespace Core;
 
+use Diversen\Lang;
 use Exception;
 use Silex\Application;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -13,7 +14,7 @@ use Symfony\Component\Validator\Constraints as Assert;
 class App
 {
 
-    public static array $middleware = [];
+    public static string $LANG = 'ru';
 
     public function run(): void
     {
@@ -146,5 +147,13 @@ class App
         ]);
         $response->setStatusCode(400);
         return $response;
+    }
+
+    private function setLang(): void
+    {
+        $LANG = [];
+        $l = new Lang();
+        $l->setSingleDir(__DIR__ . "/..");
+        $l->loadLanguage(self::$LANG);
     }
 }
