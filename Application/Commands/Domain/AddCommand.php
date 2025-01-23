@@ -148,7 +148,6 @@ class AddCommand extends UserCommand
                 }
 
                 $params['user_id'] = $user_id;
-                $params['chat_id'] = $chat_id;
                 $res = $this->execApiFunc('addDomain', $params, $error);
 
                 if (!empty($res)) {
