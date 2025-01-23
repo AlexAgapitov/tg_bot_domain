@@ -109,7 +109,7 @@ class DeleteCommand extends UserCommand
                     $out_text = "Отлично! Ваш домен {$res['data']['name']} успешно удален.";
                 }
 
-                $data['text'] = ($res ? $out_text : ('Ошибка!'.PHP_EOL.($error ?? 'Попробуйте позже.')));
+                $data['text'] = $out_text;
 
                 $this->conversation->stop();
 
