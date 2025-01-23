@@ -18,4 +18,6 @@ interface DomainRepositoryInterface
     public function findForCheck(): ?Domain;
 
     public function updateForCheck(Domain $domain, string $pay_date = null): void;
+
+    public function delete(int $id): void;
 }

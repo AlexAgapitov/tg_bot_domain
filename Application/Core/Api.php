@@ -64,7 +64,23 @@ class Api
             if (null === ($res = $this->parse($res))) {
                 throw new \Exception('error', 1);
             }
-            return $res['domains'] ?? [];
+            return $res['domains'];
+        } catch (\Exception $e) {
+            return null;
+        }
+    }
+
+    public function deleteDomain(array $params)
+    {
+        try {
+            if (false === ($res = $this->query('api/v1/domain/post/delete', $params, 'POST'))) {
+                throw new \Exception('error', 1);
+            }
+
+            if (null === ($res = $this->parse($res))) {
+                throw new \Exception('error', 1);
+            }
+            return $res;
         } catch (\Exception $e) {
             return null;
         }

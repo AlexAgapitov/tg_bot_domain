@@ -60,6 +60,20 @@ class App
                 self::validation($request->request->all(), $constraint, $app);
             });
 
+            $app->post('/api/v1/domain/post/delete', function (Request $request) use ($app) {
+                return
+                    false !== ($data = Router::deleteDomain($request->request->all()))
+                        ? self::buildSuccess([])
+                        : self::buildError(['message' => Router::getErrorMessage()])
+                    ;
+            })->before(function (Request $request) use ($app) {
+                $constraint = new Assert\Collection([
+                    'user_id' => new Assert\Positive(),
+                    'domain_id' => new Assert\Positive()
+                ]);
+                self::validation($request->request->all(), $constraint, $app);
+            });
+
             $app->error(function (\Exception $e) use ($app) {
                 if ($e instanceof BadRequestHttpException) {
                     return self::buildError(['message' => $e->getMessage()]);

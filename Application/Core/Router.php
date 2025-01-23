@@ -55,6 +55,22 @@ class Router
         }
     }
 
+    public static function deleteDomain($params)
+    {
+        try {
+            $Repository = new \Src\Infrastructure\Repository\DomainRepository();
+            $UseCase = new \Src\Application\UseCase\DeleteDomain\DeleteDomainUseCase($Repository);
+            $Command = new \Src\Infrastructure\Command\DeleteDomainCommand($UseCase);
+            $Request = new \Src\Application\UseCase\DeleteDomain\DeleteDomainRequest($params['user_id'], $params['domain_id']);
+            $result = $Command($Request);
+
+            return $result->pay_date;
+        } catch (\Exception $e) {
+            self::$error_message = $e->getMessage();
+            return false;
+        }
+    }
+
     public static function getTimes(): array
     {
         $Repository = new \Src\Infrastructure\Repository\TimesRepository();

@@ -106,6 +106,15 @@ class DomainRepository implements DomainRepositoryInterface
         }
     }
 
+    public function delete(int $id): void
+    {
+        $sql_q = "DELETE FROM data_domains WHERE id = $id";
+
+        if (false === Database::getDB()->query($sql_q)) {
+            throw new \Exception('Error delete domain');
+        }
+    }
+
 
     private function prepareDomain(array $values)
     {
