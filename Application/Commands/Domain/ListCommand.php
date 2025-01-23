@@ -30,7 +30,7 @@ class ListCommand extends UserCommand
         $message = null;
 
         if ($Api->getRequest()['status'] !== 200 || null === $domains) {
-            $message = "Ошибка! Попробуйте позже.";
+            $message = "Ошибка! Команда в данный момент недоступна. Попробуйте позже.";
         } else {
             if (!empty($domains)) {
                 $message = "Список Ваших доменов:" . PHP_EOL;
@@ -40,7 +40,7 @@ class ListCommand extends UserCommand
                 }
 
             } else {
-                $message = "У Вас не добавлено доменов. Чтобы добавить момент введите /add";
+                $message = "У Вас не добавлено доменов. " . PHP_EOL . "Чтобы добавить домен введите /add";
             }
         }
 

@@ -65,8 +65,16 @@ class AddCommand extends UserCommand
                 $text = '';
             case 1:
                 $res = $this->execApiFunc('getTimes', [], $error);
+                if (!empty($error)) {
+                    $this->conversation->update();
+                    unset($notes['state']);
+                    $this->conversation->stop();
+                    $data['text'] = $error;
+                    $result = Request::sendMessage($data);
+                    break;
+                }
+
                 $keyboard = array_column($res, 'name');
-//                $keyboard = ['11:00 - 12:00', '12:00 - 13:00'];
                 if ($text === '' || !in_array($text, $keyboard, true)) {
                     $notes['state'] = 1;
                     $this->conversation->update();
@@ -94,8 +102,16 @@ class AddCommand extends UserCommand
                 $text = '';
             case 2:
                 $res = $this->execApiFunc('getDays', [], $error);
+                if (!empty($error)) {
+                    $this->conversation->update();
+                    unset($notes['state']);
+                    $this->conversation->stop();
+                    $data['text'] = $error;
+                    $result = Request::sendMessage($data);
+                    break;
+                }
+
                 $keyboard = array_column($res, 'name');
-//                $keyboard = ['1 день', '3 дня', '7 дней'];
                 if ($text === '' || !in_array($text, $keyboard, true)) {
                     $notes['state'] = 2;
                     $this->conversation->update();
@@ -125,7 +141,7 @@ class AddCommand extends UserCommand
                 $this->conversation->update();
                 $params = [];
 
-                $out_text = 'Отлично! Ваш домен успешно добавлен.' . PHP_EOL;
+                $out_text = null;
                 unset($notes['state']);
                 foreach ($notes as $k => $v) {
                     $params[$k] = $v;
@@ -155,7 +171,7 @@ class AddCommand extends UserCommand
     {
         $res = $this->Api->$method($params);
         if ($this->Api->getRequest()['status'] !== 200 || empty($res)) {
-            $error = $this->Api->getMessage() ?? null;
+            $error = $this->Api->getMessage() ?? "Ошибка! Команда в данный момент недоступна. Попробуйте позже.";
             return false;
         }
         return $res;

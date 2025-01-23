@@ -55,8 +55,11 @@ class DeleteCommand extends UserCommand
         $domains = $Api->getDomains($params);
         $message = null;
 
-        if ($Api->getRequest()['status'] !== 200 || empty($domains)) {
+        if ($Api->getRequest()['status'] !== 200) {
             $data['text'] = "Ошибка! Команда в данный момент недоступна. Попробуйте позже.";
+            $result = Request::sendMessage($data);
+        } else if (empty($domains)) {
+            $data['text'] = "У Вас не добавлено доменов. " . PHP_EOL . "Чтобы добавить домен введите /add";
             $result = Request::sendMessage($data);
         } else {
             switch ($state) {
