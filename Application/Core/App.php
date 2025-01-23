@@ -18,6 +18,7 @@ class App
 
     public function run(): void
     {
+        $this->setLang();
         if (isset($_SERVER['REQUEST_METHOD'])) {
             $app = new \Silex\Application();
 
