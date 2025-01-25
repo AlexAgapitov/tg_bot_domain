@@ -65,7 +65,7 @@ class StartCommand extends SystemCommand
         // $deep_linking_parameter = $this->getMessage()->getText(true);
 
         return $this->replyToChat(
-            'Привет!'
+            'Привет!'.PHP_EOL.'Чтобы добавить домен ввидете /add'
         );
     }
 }
