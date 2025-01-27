@@ -1,7 +1,7 @@
 <?php
 return [
-    'bot_api_key' => '8083746843:AAE10syeqtx0H45K9dlsgClHiktolAZmoTo',
-    'bot_username' => 'dont_forget_pay_domen_bot',
+    'bot_api_key' => $_ENV['bot_api_key'],
+    'bot_username' => $_ENV['bot_username'],
     'bot_hook_url' => $_ENV['domain'].'Service/hook.php',
 
     'commands' => [
