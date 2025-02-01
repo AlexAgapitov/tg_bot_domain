@@ -22,8 +22,5 @@ class Name
         if (mb_strlen($value) === 0) {
             throw new \InvalidArgumentException('Invalid Name');
         }
-//        if (gethostbyname($value) === $value) {
-//            throw new \InvalidArgumentException('No DNS Record found');
-//        }
     }
 }

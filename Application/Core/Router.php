@@ -14,7 +14,6 @@ class Router
     public static function addDomain(array $params)
     {
         try {
-//            $params = self::$params['POST'];
 
             $url = parse_url($params['name']);
 
