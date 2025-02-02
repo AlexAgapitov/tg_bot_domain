@@ -1,5 +1,6 @@
 /vendor/
 /composer.lock
 /.idea
-/Application/.env
+/.env
 /composer.phar
+/.env
