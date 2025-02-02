@@ -76,6 +76,71 @@ class App
                 self::validation($request->request->all(), $constraint, $app);
             });
 
+            $app->post('/service/hook', function () use ($app) {
+                $config = include_once __DIR__ . '/../Core/config.php';
+
+                $bot_api_key  = $config['bot_api_key'];
+                $bot_username  = $config['bot_username'];
+
+                try {
+                    // Create Telegram API object
+                    $telegram = new \Longman\TelegramBot\Telegram($bot_api_key, $bot_username);
+
+                    $telegram->addCommandsPaths($config['commands']['paths']);
+
+                    $telegram->enableMySql($config['mysql']);
+
+
+                    // Handle telegram webhook request
+                    $telegram->handle();
+                } catch (\Longman\TelegramBot\Exception\TelegramException $e) {
+                    // Silence is golden!
+                    // log telegram errors
+                    // echo $e->getMessage();
+                }
+            });
+
+            $app->post('/service/set', function () use ($app) {
+                $config = include_once __DIR__ . '/../Core/config.php';
+
+                $bot_api_key  = $config['bot_api_key'];
+                $bot_username = $config['bot_username'];
+                $hook_url     = $config['bot_hook_url'];
+
+                try {
+                    // Create Telegram API object
+                    $telegram = new \Longman\TelegramBot\Telegram($bot_api_key, $bot_username);
+
+                    // Set webhook
+                    $result = $telegram->setWebhook($hook_url);
+                    if ($result->isOk()) {
+                        echo $result->getDescription();
+                    }
+                } catch (\Longman\TelegramBot\Exception\TelegramException $e) {
+                    // log telegram errors
+                    // echo $e->getMessage();
+                }
+            });
+
+            $app->post('/service/unset', function () use ($app) {
+                $config = include_once __DIR__ . '/../Core/config.php';
+
+                $bot_api_key  = $config['bot_api_key'];
+                $bot_username = $config['bot_username'];
+
+                try {
+                    // Create Telegram API object
+                    $telegram = new \Longman\TelegramBot\Telegram($bot_api_key, $bot_username);
+
+                    // Unset / delete the webhook
+                    $result = $telegram->deleteWebhook();
+
+                    echo $result->getDescription();
+                } catch (\Longman\TelegramBot\Exception\TelegramException $e) {
+                    echo $e->getMessage();
+                }
+            });
+
             $app->error(function (\Exception $e) use ($app) {
                 if ($e instanceof BadRequestHttpException) {
                     return self::buildError(['message' => $e->getMessage()]);

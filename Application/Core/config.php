@@ -2,7 +2,7 @@
 return [
     'bot_api_key' => $_ENV['bot_api_key'],
     'bot_username' => $_ENV['bot_username'],
-    'bot_hook_url' => $_ENV['domain'].'Service/hook.php',
+    'bot_hook_url' => $_ENV['domain'].'service/hook',
 
     'commands' => [
         'paths' => [
