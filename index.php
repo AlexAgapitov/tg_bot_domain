@@ -8,9 +8,6 @@ use Core\App;
 require_once 'autoload.php';
 
 try {
-    $dotenv = Dotenv\Dotenv::createImmutable(__DIR__);
-    $dotenv->load();
-
     (new App())->run();
 } catch (Exception $exception) {
     var_dump($exception);

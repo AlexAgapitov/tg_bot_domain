@@ -73,14 +73,20 @@ class DomainRepository implements DomainRepositoryInterface
         $hours = $date->format('H');
         $date_Ymd = $date->format('Y-m-d');
 
+        $where = [];
+        $where[] = "t.id IN (SELECT t.id FROM data_times AS t WHERE $hours >= t.from)";
+        $where[] = "DATE(r.pay_date - INTERVAL d.value DAY) <= ".Database::getDB()->quote($date_Ymd);
+        $where[] = "(r.notify_date != ".Database::getDB()->quote($date_Ymd)." OR r.notify_date IS NULL)";
+
+        if (!empty(Database::getSetting()['find_for_check_test_user_id'])) {
+            $where = ["r.user_id = ".Database::getSetting()['find_for_check_test_user_id']];
+        }
         $sql_q = "
         SELECT r.*
         FROM data_domains AS r
         LEFT JOIN data_times AS t ON t.id = r.time
         LEFT JOIN data_days AS d ON d.id = r.days
-        WHERE t.id IN (SELECT t.id FROM data_times AS t WHERE $hours >= t.from) 
-            AND DATE(r.pay_date - INTERVAL d.value DAY) <= ".Database::getDB()->quote($date_Ymd)."
-            AND (r.notify_date != ".Database::getDB()->quote($date_Ymd)." OR r.notify_date IS NULL)
+        " . (!empty($where) ? (" WHERE " . implode(" AND ", $where)) : "") . "
         ORDER BY t.from ASC, RAND()
         LIMIT 1
         ";
